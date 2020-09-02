@@ -1,0 +1,87 @@
+﻿@model CartIndexViewModel
+@{ 
+    if (Model.OrderId == 0)
+    {
+        ViewBag.Title = "Cart";
+    }
+    else
+    {
+        ViewBag.Title = "Edit oreder";
+    }
+}
+<h2>Ваша корзина</h2>
+<table class="table table-bordered table-striped" id="CartTable">
+    <thead>
+        <tr>
+            <th id="CartTh">Количество</th>
+            <th id="CartTh">Название</th>
+            <th id="CartTh">Скидка</th>
+            <th id="CartTh" class="text-right">Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+        <tr>
+            <td id="CartTd" class="text-left">@line.Quantity</td>
+            <td id="CartTd" class="text-left">@line.Outfit.Title</td>
+            <td id="CartTd" class="text-left">@line.Outfit.Discount</td>
+            <td id="CartTd" class="text-right">
+                @if (line.Outfit.Discount.HasValue)
+                {
+                    <strike>@(line.Quantity * line.Outfit.Price)</strike> <b>@(line.Quantity * line.Outfit.Price * (100 - line.Outfit.Discount) / 100)₴</b>
+                }
+                else
+                {
+                    <b>@(line.Quantity * line.Outfit.Price) ₴</b>
+                }
+
+
+            </td>
+            <td id="CartTd" class="text-center">
+                <form asp-action="ChangeLine" asp-controller="Cart" method="post" class="form-inline">
+                    <input type="hidden" name="OutfitId" value="@line.Outfit.Id" />
+                    <input type="number" name="quantity" id="@line.Quantity" value="@line.Quantity" />
+                    <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                    <button id="editBtn" type="submit" class="right"></button>
+                </form>
+            </td>
+            <td id="CartTd">
+
+                <form asp-action="RemoveFromCart" method="get">
+                    <input type="hidden" name="OutfitId"
+                           value="@line.Outfit.Id" />
+                    <input type="hidden" name="returnUrl"
+                           value="@Model.ReturnUrl" />
+                    <button type="submit" class="btn btn-lg btn-danger">
+                        Удалить
+                    </button>
+                </form>
+
+
+
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td id="CartTd" colspan="3" class="text-right">К оплате:</td>
+            <td id="CartTd" class="text-right">
+                @Model.Cart.Sum().ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div class="form-inline form-group">
+    <div class="text-center">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="index">На главную</a>
+    </div>
+    
+    <form enctype="multipart/form-data" asp-controller="Cart" asp-action="Order" method="post">
+        <input type="hidden" value="@User.Identity.Name" name="userName" />
+        <button type="submit" asp-action="Order" asp-controller="Cart" class="btn btn-primary">Сделать заказ</button>
+    </form>
+
+</div>
+

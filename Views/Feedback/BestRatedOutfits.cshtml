@@ -1,0 +1,45 @@
+﻿@model TopRatedOutfitsVM
+
+@{
+    Layout = "_Statistics";
+    ViewBag.Title = "Рейтинг товаров";
+}
+
+<div class="row">
+    <div class="com-md=3 col-md-offset-4">
+        <h1>Рейтинг товаров по оценкам</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <table class="table table-bordered table-striped" id="CartTable">
+            <thead>
+                <tr>
+                    <th id="CartTh">
+                        <sort-header return-url="@Model.ReturnUrl" action="BestRatedOutfits" up="@Model.SortViewModel.Up" 
+                                 current="@Model.SortViewModel.Current" property="@Model.SortViewModel.TitleSort">
+                            Название
+                        </sort-header>
+                    </th>
+                    <th id="CartTh">
+                        <sort-header return-url="@Model.ReturnUrl" action="BestRatedOutfits" up="@Model.SortViewModel.Up" 
+                                 current="@Model.SortViewModel.Current" property="@Model.SortViewModel.PriceSort">
+                            Рейтинг 
+                        </sort-header>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model.RatedOutfits)
+                {
+                    <tr>
+                        <td id="CartTd">@o.Outfit.Title</td>
+                        <td id="CartTd">@o.Rating</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

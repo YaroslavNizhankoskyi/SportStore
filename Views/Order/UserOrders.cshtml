@@ -1,0 +1,64 @@
+﻿@model UserOrdersVM
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+
+    <div class="row text-center" style="place-content:center;
+                margin-bottom:10px">
+        <h1 style="margin-right:10px;">
+            Цена: @Model.Price ₴
+        </h1>
+        <form asp-action="UserOrders" asp-controller="Order" method="get" class="modal-right right">
+            <input type="hidden" name="sort" value="@TempData["Sort"]"/>
+            <button type="submit" class="btn-lg" id="btn-reverse">
+            </button>
+        </form>
+    </div>
+
+@if (Model.Orders.Any())
+{
+    @foreach (OrderVM o in Model.Orders)
+    {
+        <div class="row" id="UserOrder" style="margin-top:5px">
+            <div class="card col-md-4 offset-md-4">
+                <div class="row card-header">
+                    <h3>№ @o.Number </h3>
+                    <h3 class="col-md-offset-5 col-md-6">Общая сумма: @o.OrderPrice ₴</h3>
+                </div>
+
+                <div class="card-body" >
+                    <table style="font-size:14px;">
+                        <thead>
+                            <tr>
+                                <th style="border-bottom-style:hidden; font-size:14px; width:25%">Название</th>
+                                <th style="border-bottom-style:hidden; font-size:14px;width:30%">Количество</th>
+                                <th style="border-bottom-style:hidden; font-size:14px;width:25%" class="text-center">Цена</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (CartLine ct in o.Lines)
+                            {
+                                <tr>
+                                    <td style="border-left-style:hidden; font-size:14px;width:25%;">@ct.Outfit.Title</td>
+                                    <td style="border-right-style:hidden;margin-right:5px; width:30%;font-size:14px;">@ct.Quantity</td>
+                                    <td style="font-size:14px; width:25%;" class="text-center">@ct.Price ₴</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="row text-center" style="place-content:center;
+                margin-bottom:10px">
+        <h1 class="text-center">У вас нет заказов...</h1>
+    </div>
+}

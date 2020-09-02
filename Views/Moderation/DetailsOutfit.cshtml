@@ -1,0 +1,62 @@
+﻿@model Outfit 
+
+@{ 
+    ViewBag.Title = "Details";
+    var photoPath = "~/images/" + (Model.PhotoPath ?? "noimage.jpg");
+    
+}
+
+    <div class="row justify-content-center m-3">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header" style="
+                                                            padding: 15px 10px;
+                                                            background: none;
+                                                            border: none;">
+
+                    <div class="text-center" style="place-content:center;">
+                        <h1>@Model.Title</h1>
+                    </div>
+                    <div class="text-center" style="place-content:center;">
+                        <h2>
+                            ID: @Model.Id
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="card-body text-center">
+                    <img class="card-img-top" id="Outfit-img" src="@photoPath" asp-append-version="true" />
+
+                    <div class="row">
+                        <dl class="row col-md-6">
+                            <dt class="col-sm-6 text-muted h2">Категория:</dt>
+                            <dd class="col-sm-6 h2">@Model.Department</dd>
+                            <dt class="col-sm-6 text-muted h2">Цена:</dt>
+                            <dd class="col-sm-6  h2">@Model.Price</dd>
+
+
+                            <dt class="col-sm-6 text-muted h2">Скидка:</dt>
+                            @if (Model.Discount == null || !Model.Discount.HasValue)
+                            {
+                                <dd class="col-sm-6  h2">—</dd>
+
+                            }
+                            else
+                            {
+                                <dd class="col-sm-6  h2">@Model.Discount</dd>
+                            }
+                        </dl>
+                        <div class="row col-md-6">
+                            <p class="h2 text-break text-left"><b class="text-muted">Описание:</b> <br /> @Model.Description</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer form-inline">
+                    <a asp-controller="Moderation" asp-action="Outfits"
+                       class="btn btn-primary btn-lg">Обратно</a>
+                </div>
+            </div>
+        </div>
+    </div>

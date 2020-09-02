@@ -1,0 +1,77 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewBag.Title = "Ваш Профиль";
+ }
+
+<body id="body-profile">
+    <div class="row" style="margin:40px 0px 0px 0px">
+        <h1 class="col-md-6 col-md-offset-2 text-center">
+            @Model.Name
+        </h1>
+
+        <div class="col-md-1">
+            <form asp-action="logout" asp-controller="Account">
+                <button class="btn btn-lg btn-outline-grey">
+                    Выйти
+                </button>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-outline-orange" style="font-size: small" 
+                    asp-action="ChangePassword" asp-controller="Account">
+                Сменa пароля
+            </a>
+        </div>
+    </div>
+
+    <div class="row" style=" margin-top:5% ">
+        <h3 class="col-md-12 text-center">
+            Настройка ваших персональных даных
+        </h3>
+      
+        <form class="form-inline form-group col-md-8 row offset-2" method="post"
+              asp-action="ChangePersonalData" asp-controller="Account">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row col-md-12" style="    padding: 20px 0 20px;
+                                                  border: 3px dashed #E76881;
+                                                  margin: 10px 0 30px 0; ">
+                <div class="col-md-3">
+                    <h3>Имя</h3>
+                    <input asp-for="Name" class="form-control-lg" name="Name" title="Ваше имя"
+                           placeholder="@Model.Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <h3>Почта</h3>
+                    <input asp-for="Email" class="form-control-lg" name="Email" title="Ваше имя"
+                           placeholder="@Model.Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+
+                <div class="col-md-3"
+                     style="margin-left:20px">
+                    <h3>Место жительства</h3>
+                    <input asp-for="Location" class="form-control-lg" title="Ваше имя" name="Location" placeholder="@Model.Location" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+
+                <div class="col-md-2">
+                    <input hidden asp-for="Id" name="Id" />
+                    <button class="btn btn-lg" style="background-color:#9B273E ;
+                                                width: 120%;
+                                                font-size: small"
+                            type="submit">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</body>

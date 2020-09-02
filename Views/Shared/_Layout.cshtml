@@ -1,0 +1,192 @@
+﻿@inject SignInManager<Customer> signInManager
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OutfitMarket</title>
+
+    <environment include="Development">
+
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/lib/jqueryui/jquery-ui.css" rel="stylesheet" />
+        <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/lib/mdbootstrap/css/mdb.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
+    </environment>
+
+</head>
+<body style="font-size:14px">
+    <nav class="navbar navbar-expand-sm" style="background-color:#E73A5C; ">
+        <a asp-controller="home" asp-action="index" class="navbar-brand">
+            <img src="~/images/gymHOME.png"
+                 style="height:49px; width:49px;" />
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item" style="margin-top:5px">
+                    <a asp-controller="home" asp-action="index" class="nav-link" id="nav_link">Каталог</a>
+                </li>
+                @if (!signInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item" style="margin-top:5px">
+                        <a asp-controller="account" asp-action="register" class="nav-link" id="nav_link">Регистрация</a>
+                    </li>
+                    <li class="nav-item" style="margin-top:5px">
+                        <a asp-controller="account" asp-action="login" class="nav-link" id="nav_link">Логин</a>
+                    </li>
+
+                }
+                @if (signInManager.IsSignedIn(User) && (User.IsInRole("admin") || User.IsInRole("moderator")))
+                {
+                    <li class="nav-item dropdown" style="margin-top:5px">
+                        <a class="nav-link dropdown-toggle" id="navBarDropDownMenu" href="#" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false" style="font-size:large; color:white">
+                            Модерация
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navBarDropDownMenu">
+
+                            <a asp-controller="moderation" asp-action="Outfits" class="dropdown-item" style="font-size:medium">Экипировка</a>
+
+                            <a asp-controller="Administration" asp-action="ListRoles" class="dropdown-item" style="font-size:medium">Роли</a>
+
+                        </div>
+                    </li>
+
+
+                    <li class="nav-item dropdown" style="margin-top:5px">
+                        <a class="nav-link dropdown-toggle" id="navBarDropDownMenu" href="#"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:large; color:white">
+                            Статистика
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navBarDropDownMenu">
+
+                            <a asp-controller="Order" asp-action="PopularBuy"
+                               asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()" class="dropdown-item" style="font-size:medium">Популярный инвентарь</a>
+
+                            <a asp-controller="Feedback" asp-action="BestRatedOutfits"
+                               asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()" class="dropdown-item" style="font-size:medium">Высший рейтинг</a>
+                            <a asp-controller="Feedback" asp-action="BestInGenre"
+                               asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()" class="dropdown-item" style="font-size:medium">Лучшие в жанре</a>
+                        </div>
+                    </li>
+
+
+
+
+                }
+                <li class="nav-item" style="margin-top:5px">
+                    <a asp-action="UserOrders" asp-controller="Order" class="nav-link" id="nav_link">Заказы</a>
+                </li>
+
+                <li class="nav-item" style="margin-left:50px">
+                    <div class="form-inline">
+                        <img src="~/images/phone-call (1).png" style=" width:24px; height:24px; margin-bottom:1rem;" />
+                        <p style="color:white; padding-left:1rem;" class="text-lg">+38 (099) 6300 376</p>
+                    </div>
+                    <div class="form-inline">
+                        <img src="~/images/wall-clock.png" style="width:24px; height:24px; margin-bottom:7px" />
+                        <p style="color:white; padding-left:1rem;">10:00 - 20:00</p>
+                    </div>
+                </li>
+                <li class="nav-item" style="margin-left:10px">
+                    <div class="form-inline">
+                        <img src="~/images/seo-and-web.png" style=" width:24px; height:24px; margin-bottom:1rem;" />
+                        <p style="color:white; padding-left:1rem;" class="text-lg">ул. Сумская 35В</p>
+                    </div>
+                    <div class="form-inline">
+                        <img src="~/images/envelopes.png" style="width:24px; height:24px; margin-bottom:7px" />
+                        <p style="color:white; padding-left:1rem;">homegym1@gmail.com</p>
+                    </div>
+                </li>
+
+
+            </ul>
+
+                            <ul class="navbar-nav ml-auto shopping-item" style="margin-right: 100px;margin-top:10px;">
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    <li class="nav-item">
+                                        <form method="post" asp-action="Profile" asp-controller="Account">
+                                            <button type="submit" class="nav-link btn"
+                                                    style="font-size: 16px;
+                                                    color: white;
+                                                    background-color: #cf0028;
+                                                    box-shadow: none;
+                                                    margin-top: 10px;">
+                                                @User.Identity.Name
+
+
+                                            </button>
+
+                                        </form>
+
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a asp-action="CartIndex" asp-controller="Cart" id="nav_link">
+                                        Корзина -
+                                        <img src="~/images/shopping-cart-of-checkered-design-true.png" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <partial name="_CookieConsentPartial" />
+                    @if (TempData["message"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["message"]</div>
+                    }
+                    @if (TempData["BadMessage"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["BadMessage"]</div>
+                    }
+                    <div class="container body-content" id="container">
+                        @RenderBody()
+                        <hr />
+                        <footer>
+                            <p>&copy; 2020 - OutfitMarket</p>
+                        </footer>
+                    </div>
+
+                    <environment include="Development">
+
+                        <script src="~/lib/jquery/dist/jquery.js"></script>
+                        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+                        <script src="~/lib/font-awesome/js/fontawesome.js"></script>
+                        <script src="~/lib/mdbootstrap/js/mdb.js"></script>
+                        <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+                        <script src="~/lib/bootstrap-show-password/bootstrap-show-password.js"></script>
+                        <script src="~/j/lib/bootstrap/dist/js/s/site.js" asp-append-version="true"></script>
+                        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+                        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+                    </environment>
+                    <environment exclude="Development">
+                        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                                asp-fallback-test="window.jQuery"
+                                crossorigin="anonymous"
+                                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+                        </script>
+                        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                                crossorigin="anonymous"
+                                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+                        </script>
+                        <script src="~/js/site.min.js" asp-append-version="true"></script>
+                    </environment>
+
+                    @RenderSection("Scripts", required: false)
+                </body>
+                </html>

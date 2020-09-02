@@ -1,0 +1,259 @@
+﻿@model IndexViewModel
+
+@{
+    ViewBag.Title = "All Outfits";
+    if (Model.SelectedMinPrice == 0) Model.SelectedMinPrice = Model.MinPrice;
+    if (Model.SelectedMaxPrice == 0) Model.SelectedMaxPrice = Model.MaxPrice;
+    
+}
+
+
+    <div>
+
+
+
+        @if (!string.IsNullOrEmpty(Model.OutfitTitle))
+        {
+            <form method="get" asp-action="index" asp-controller="home" class="form-inline row align-content-center">
+                <input name="Outfittitle" value="@Model.OutfitTitle"class="form-control center-block col-md-8" id="search" type="text" placeholder="Поиск" aria-label="Search" />
+                <button type="submit" id="searchBtn" class="btn btn-outline-info waves-effect"></button>
+            </form>
+        }
+        else
+        {
+            <form method="get" asp-action="index" asp-controller="home" class="form-inline row align-content-center">
+                <input name="Outfittitle" class="form-control center-block col-md-8" id="search" type="text" placeholder="Поиск" aria-label="Search" />
+                <button type="submit" id="searchBtn" class="btn btn-outline-info waves-effect"></button>
+            </form>
+        }
+
+
+    </div>
+<!--Filters-->
+<div class="row" style="background-color: #E76881; padding-top:10px; ">
+    <form class="form-inline form-group col-md-8 offset-2" method="get" asp-action="index" asp-controller="home">
+
+        <div class="col-md-2" id="filter_wrapper">
+            <h3>Раздел</h3>
+            <select name="selectedDepartment" asp-items="@ViewBag.Departments" class="form-control text-lg-left" id="filter" placeholder="Раздел">
+                <option>Все</option>
+            </select>
+
+            
+        </div>
+
+
+        <div id="filter_wrapper" class="col-md-3" style="margin-left:20px">
+            <div class="row input-group-lg" style="margin-bottom:10px;" >
+                <span class="input-group-text col-md-3" style="border-radius: 0.25rem 0 0 0.25rem;">От</span>
+                <input type="number" asp-for="SelectedMinPrice" min="@Model.MinPrice" max="@Model.MaxPrice" 
+                       value="@Model.SelectedMinPrice"class="form-control col-md-9" style="border-radius: 0 0.25rem 0.25rem 0;" />
+            </div>
+
+            <div class="row input-group-lg" >
+                <span class="input-group-text col-md-3" style="border-radius: 0.25rem 0 0 0.25rem;">До</span>
+                <input type="number" asp-for="SelectedMaxPrice" min="@Model.MinPrice" max="@Model.MaxPrice" 
+                       value="@Model.SelectedMaxPrice" class="form-control col-md-6" style="border-radius:0.1rem" />
+                <span class="input-group-text col-md-3" style="border-radius: 0 0.25rem 0.25rem 0;">грн</span>
+
+            </div>
+        </div>
+
+        <div class="col-md-2" id="filter_wrapper">
+            <h3>Сортировать по</h3>
+            <select class="form-control text-lg-left" name="selectedSort" id="filter">
+                <option>По цене &#8593;</option>
+                <option>По цене &#8595;</option>
+                <option>По алфавиту &#8593;</option>
+                <option>По алфавиту &#8595;</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <button class="btn" id="filterBtn" style="background-color:#9B273E" type="submit">Фильтр</button>
+        </div>
+    </form>
+</div>
+<div>
+    <!--Indent Left
+    <div class="col-md-1">
+
+    </div>
+     -->
+    <!--Body-->
+    <div class="col-md-10 offset-2 row" style="background-color:white">
+
+        <!--Product grid-->
+        <div class=" card-deck col-md-12">
+            @if (Model.Outfits.Any())
+            {
+                @for (int i = 0; i <= Model.Outfits.Count() / 4; i++)
+                {
+                   <div class="row col-md-12">
+                    @for (int c = 0; c < 4; c++)
+                    {
+                        if ((i * 4 + c) < Model.Outfits.Count() )
+                        {
+                            var photoPath = "~/images/" + (Model.Outfits[i * 4 + c].PhotoPath ?? "noimage.png");
+                            
+                              <div class="card col-md-2 product-item" id="index_item">
+                                  <div class="card-header">
+                                        <h3 class="text-truncate">@Model.Outfits[i * 4 + c].Title </h3>
+                                  </div>
+                                  <img src="@photoPath" class="card-img-top" id="Outfit-img" asp-append-version="true" />
+
+
+
+                                  <div class="card-footer justify-content-md-center" style=" padding: 15px; position:sticky; height:100%;">
+
+
+
+                                        <div style="margin: 0 0 5px 0;
+                                                    padding-left: 10px;">
+                                            <h4 class="text-dark font-weight-bold" style="
+                                                    font-size: 18px; ">
+                                            @Model.Outfits[i * 4 + c].Price ₴</h4>
+
+                                            @if (Model.Outfits[i * 4 + c].Discount.HasValue)
+                                            {
+
+                                                <div class="row">
+                                                    <h4 class="text-danger font-weight-bold col-md-5" style="
+                                                font-size: 14px; padding-right:0px; margin-top: 5px">
+                                                        @Model.Outfits[i * 4 + c].Discount ₴
+                                                    </h4>
+                                                    <div class="col-md-6"     style="padding-left: 0px !important;">
+                                                        <img  src="~/images/discount.png" style="width:24px; height:24px">
+                                                    </div>
+                                                </div>
+                                            }
+                                            else 
+                                            {
+                                                <div style="margin-bottom:40px">
+
+                                                </div>
+                                            }
+
+
+
+
+                                        </div>
+                                        <hr class="accent-2" />
+
+                                        <div class="form-group form-inline" style="padding-left:10px">
+                                            <div>
+                                                <a asp-controller="home" asp-action="details"
+                                                   asp-route-OutfitId="@Model.Outfits[i * 4 + c].Id"
+                                                   class="btn" 
+                                                   style="border:1.5px solid #E73A5C">
+                                                   Детали
+                                                </a>
+                                            </div>
+
+                                            <form id="@Model.Outfits[i * 4 + c].Id" asp-action="AddToCart"
+                                                  asp-controller="Cart" method="post">
+                                                <input type="hidden" name="OutfitId" value="@Model.Outfits[i * 4 + c].Id" />
+                                                <input type="hidden" name="returnUrl"
+                                                       value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+                                                <span class="card-text p-1" style="padding:0px !important">
+                                                    <button type="submit"
+                                                            class="btn "
+                                                            style="border: 2px solid orange">
+                                                        В корзину
+                                                    </button>
+                                                </span>
+                                            </form>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                           
+                        }
+                        else
+                        {
+
+                        }
+                    }</div>
+                }
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="accent-1">
+                            Указанного товара нет...
+                        </h1>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+
+    </div>
+
+    <!--Indent right
+    <div class="col-md-1">
+
+    </div>
+        -->
+</div>
+
+
+
+
+
+
+@section Scripts{
+
+
+    <script>
+
+        function updateTextInput(val, num) {
+            if (num == 1) {
+                document.getElementById("priceMinVal").innerText = "Минимальная цена: " + val;
+            } else
+            {
+                document.getElementById("priceMaxVal").innerText = "Максимальная цена: " + val;
+            }
+        }
+ 
+
+
+        /*
+        window.onload = function () {
+            if (window.jQuery) {
+                // jQuery is loaded
+                alert("Yeah!");
+            } else {
+                // jQuery is not loaded
+                alert("Doesn't Work");
+            }
+        }*/
+
+
+        /*
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+
+
+            $(".viewDialog").on("click", function (e) {
+                e.preventDefault();
+                $("<div></div>")
+                    .addClass("dialog")
+                    .appendTo("body")
+                    .dialog({
+                        title: $(this).attr("data-dialog-title"),
+                        close: function () { $(this).remove() },
+                        modal: true
+                    })
+                    .load(this.href);
+
+            });
+
+        });*/
+    </script>
+}

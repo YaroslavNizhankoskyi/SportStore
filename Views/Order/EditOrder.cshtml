@@ -1,0 +1,69 @@
+﻿@model CartIndexViewModel
+@{
+        ViewBag.Title = "Edit oreder";
+}
+<h2>Your cart</h2>
+<table class="table table-bordered table-striped" id="CartTable">
+    <thead>
+        <tr>
+            <th id="CartTh">Quantity</th>
+            <th id="CartTh">Item</th>
+            <th id="CartTh" class="text-right">Price</th>
+            <th id="CartTh" class="text-right">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+            <tr>
+
+                <td id="CartTd" class="text-left">@line.Outfit.Title</td>
+                <td id="CartTd" class="text-right">@line.Outfit.Price.ToString("c")</td>
+                <td id="CartTd" class="text-right">
+                    @((line.Quantity * line.Outfit.Price).ToString("c"))
+
+                </td>
+                <td id="CartTd" class="text-center">
+                    <form asp-action="ChangeLine" asp-controller="Order" method="post" class="form-inline">
+                        <input type="hidden" name="OutfitId" value="@line.Outfit.Id" />
+                        <input type="number"  max="100" min="1" name="quantity" id="@line.Quantity" value="@line.Quantity" />
+                        <input type="hidden" name="orderId" value="@Model.OrderId" />
+                        <button id="editBtn" type="submit" class="right"></button>
+                    </form>
+                </td>
+                <td id="CartTd">
+
+                    <form asp-action="RemoveFromOrder" method="get">
+                        <input type="hidden" name="OutfitId"
+                               value="@line.Outfit.Id" />
+                        <input type="hidden" name="orderId" value="@Model.OrderId"/>
+                        <button type="submit" class="btn btn-lg btn-danger">
+                            Remove
+                        </button>
+                    </form>
+
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td id="CartTd" colspan="3" class="text-right">Total:</td>
+            <td id="CartTd" class="text-right">
+                @Model.Cart.Sum().ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div class="form-inline form-group">
+    <div class="text-center">
+        <a class="btn btn-primary" asp-action="UserOrders" asp-controller="Order">Return</a>
+    </div>
+        <form enctype="multipart/form-data" asp-controller="Order" asp-action="SaveOrder" method="post">
+            <input type="hidden" value="@Model.OrderId" name="orderId" />
+            <button type="submit"  class="btn btn-primary">Save</button>
+        </form>
+</div>
+

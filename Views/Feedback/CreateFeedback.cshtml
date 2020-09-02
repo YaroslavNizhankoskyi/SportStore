@@ -1,0 +1,54 @@
+﻿@model FeedbackVM
+@{ 
+    ViewBag.Title = "Create Feedback";
+}
+
+
+
+<body id="body_comment">
+    <div class="row" style="margin:40px 0px 0px 0px">
+        <h3 style="right:40%; left:30%; position:relative">
+            Напишите комментарий к товару
+        </h3>
+    </div>
+
+
+    <form enctype="multipart/form-data" asp-controller="Feedback" asp-action="CreateFeedback" method="post">
+        <div class="" style="margin:5% 30% 20% 35%">
+
+
+            <div asp-validation-summary="All" class="text/danger"></div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input asp-for="Rating" class="form-control" 
+                           min="0" max="5" placeholder="Рейтинг" />
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input asp-for="Comment" class="form-control" title="Комментарий" placeholder="Комментарий" />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+
+            <input type="hidden" asp-for="OutfitId" value="@ViewData["OutfitId"]"/>
+
+            <div class="form-inline" style="margin-top:20px">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" style="background-color: white !important;" title="Отправить" 
+                                class="btn btn-lg btn-outline-primary">
+                            Отправить
+                        </button>
+                    </div>
+                </div>
+                <a class="btn btn-lg btn-outline-secondary" style="background-color: white !important;" 
+                                 asp-controller="Home" asp-action="Details" asp-route-OutfitId="@ViewData["OutfitId"]">
+                    Назад
+                </a>
+            </div>
+
+        </div>
+    </form>
+</body>

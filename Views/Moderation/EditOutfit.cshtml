@@ -1,0 +1,108 @@
+﻿@model OutfitEdit
+
+@{
+    ViewBag.Title = "Edit Outfit";
+    var photoPath = "~/images/" + (Model.ExistingPhotoPath ?? "noimage.jpg");
+}
+
+<body id="body_create">
+    <div class="row" style="margin:40px 0px 0px 0px">
+        <h3 class="col-md-12 text-center">
+            Изменить экипировку
+        </h3>
+    </div>
+
+
+    <form  enctype="multipart/form-data" asp-controller="Moderation" asp-action="EditOutfit" method="post">
+        <div class="" style="margin:10% 30% 20% 35%">
+
+            <input hidden asp-for="Id" />
+            <input hidden asp-for="ExistingPhotoPath" />
+            <div asp-validation-summary="All" class="text/danger"></div>
+            <div class="form-group row">
+                <label asp-for="Title" class="col-sm-6 col-form-label">Название</label>
+                <div class="col-sm-6 input-group-lg">
+                    <input asp-for="Title" type="text" maxlength="50" class="form-control" title="Навание" placeholder="Турник красный" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="DepartmentName" class="col-sm-6 col-form-label">Категория</label>
+                <div class="col-sm-6 input-group-lg" style="left:20px">
+                    <select asp-for="DepartmentName" asp-items="@ViewBag.Department" 
+                            class="ui-selectmenu-menu form-control" placeholder="Роздел"></select>
+                    <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Description" class="col-sm-2 col-form-label">Описание</label>
+                <div class="col-sm-10 input-group-lg">
+                    <textarea asp-for="Description" class="form-control" maxlength="450" placeholder="Краткий обзор"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Price" class="col-sm-6 col-form-label">Цена</label>
+
+                <div class="col-sm-5" style="left:20px">
+                    <div class="row input-group-lg">
+                        <input type="number" asp-for="Price" class="form-control col-md-9" style="border-radius:0.1rem"
+                               min="50" max="50000" />
+                        <span class="input-group-text col-md-3" style="border-radius: 0 0.25rem 0.25rem 0;">грн</span>
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Discount" class="col-sm-6 col-form-label">Скидка</label>
+
+                <div class="col-sm-5" style="left:20px">
+                    <div class="row input-group-lg">
+                        <input type="number" asp-for="Discount" class="form-control col-md-9" style="border-radius:0.1rem"
+                               min="10" max="90" />
+                        <span class="input-group-text col-md-3" style="border-radius: 0 0.25rem 0.25rem 0;">%</span>
+                    </div>
+                    <span asp-validation-for="Discount" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Photo" class="col-sm-6 col-form-label">Фото</label>
+                <div class="col-sm-6 input-group-lg">
+                    <div class="custom-file">
+                        <input asp-for="Photo" class="form-control custom-file-input" />
+                        <label class="custom-file-label">Выберите файл...</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row col-sm-4 offset-4">
+                <img src="@photoPath" class="imageThumbnail" style="position: relative;
+                width: 100%;
+                overflow: hidden;" asp-append-version="true" />
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Обновить</button>
+                    <a asp-controller="Moderation" asp-action="Outfits" class="btn btn-primary">Назад</a>
+                </div>
+            </div>
+
+            @section Scripts{
+                <script>
+                    $(document).ready(function () {
+                        $('.custom-file-input').on("change", function () {
+                            var fileName = $(this).val().split("\\").pop();
+                            $(this).next('.custom-file-label').html(fileName);
+                        });
+                    });
+                </script>
+            }
+        </div>
+    </form>
+</body>
